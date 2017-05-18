@@ -30,11 +30,11 @@ class CreateThreadsTest extends TestCase
     {
         $this->signIn();
 
-        $thread = make('App\Thread');    //raw gives array, make gives instance of thread
+        $thread = create('App\Thread');    //raw gives array, make gives instance of thread
         $this->post('/threads', $thread->toArray());
 
         // then when visit the threads index, we should see the new thread.
-        $this->get('/threads/' . $thread->id)
+        $this->get($thread->showThreadPath())
                 ->assertSee($thread->title)
                 ->assertSee($thread->body);
     }

@@ -39,7 +39,7 @@
                 @if(auth()->check())
                     <div style="height: 250px;">
                         <h3>Reply</h3>
-                        <form method="POST" action="{{ route('add_reply_to_thread', $thread) }}">
+                        <form method="POST" action="{{ $thread->showThreadPath(). '/replies' }}">
                             {{ csrf_field() }}
                             <textarea name="body" id="body" rows="2" class="form-control" placeholder="Have something to say..."></textarea>
                             <br>

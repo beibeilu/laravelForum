@@ -23,4 +23,9 @@ class Thread extends Model
     public function addReply($reply){   // Could pass in ($reply) as an array or could be (Reply $reply) as Reply
         $this->replies()->create($reply);   // Will automatically set thread_id.
     }
+
+    public function showThreadPath()
+    {
+        return "/threads/{$this->channel->slug}/{$this->id}";
+    }
 }
