@@ -30,11 +30,12 @@ class CreateThreadsTest extends TestCase
     {
         $this->signIn();
 
-        $thread = create('App\Thread');    //raw gives array, make gives instance of thread
-        $this->post('/threads', $thread->toArray());
+        $thread = make('App\Thread');    //raw gives array, make gives instance of thread
+
+        $response = $this->post('/threads', $thread->toArray());    //use $response to find where the POSTed thread redirected.
 
         // then when visit the threads index, we should see the new thread.
-        $this->get($thread->showThreadPath())
+        $this->get($response->headers->get('Location'))     // get the location where the response is heading, without creating the thread.
                 ->assertSee($thread->title)
                 ->assertSee($thread->body);
     }
