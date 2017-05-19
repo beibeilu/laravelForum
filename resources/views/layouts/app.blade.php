@@ -41,7 +41,7 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                 All Channels <span class="caret"></span>
                             </a>
-                            @if(count($channels = App\Channel::all()))
+                            @if(count($channels))
                             <ul class="dropdown-menu" role="menu">
                                 @foreach($channels as $channel)
                                 <li>
