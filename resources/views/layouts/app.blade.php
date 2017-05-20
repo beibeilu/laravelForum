@@ -36,7 +36,16 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;<li><a href="/threads">All threads</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                Browse <span class="caret"></span>
+                            </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="/threads">All threads</a></li>
+
+                                </ul>
+                        </li>
+
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                 All Channels <span class="caret"></span>
@@ -70,6 +79,7 @@
 
 
                                     <li><a href="{{'/threads/create'}}">Create New Thread</a></li>
+                                    <li><a href="/threads?by={{ Auth::user()->name }}">My Threads</a></li>
                                     <li role="separator" class="divider"></li>
 
                                     <li>
