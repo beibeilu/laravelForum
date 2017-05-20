@@ -8,6 +8,14 @@ class Thread extends Model
 {
     protected $fillable = ['title', 'body', 'user_id', 'channel_id', 'created_at', 'updated_at'];
 
+    protected static function boot(){
+        parent::boot();
+
+        static::addGlobalScope('replyCount', function ($builder){
+            $builder->withCount('replies');
+        });
+    }
+
     public function replies(){
         return $this->hasMany(Reply::class);
     }

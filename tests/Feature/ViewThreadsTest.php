@@ -62,4 +62,20 @@ class ViewThreadsTest extends TestCase
             ->assertSee($threadByBeibei->title)
             ->assertDontSee($threadNotByBeibei->title);
     }
+
+    /** @test */
+    public function a_user_can_filter_threads_by_popularity()
+    {
+        $threadWith5Replies = create('App\Thread');
+        create('App\Reply', ['thread_id'=>$threadWith5Replies->id], 5);
+
+        $threadWith2Replies = create('App\Thread');
+        create('App\Reply', ['thread_id'=>$threadWith2Replies->id], 2);
+
+        $threadWith0Replies = $this->thread;
+
+        $response = $this->getJson('threads?popular=1')->json();
+
+        $this->assertEquals([5, 2, 0], array_column($response, 'replies_count'));
+    }
 }
