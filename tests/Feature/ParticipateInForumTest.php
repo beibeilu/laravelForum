@@ -15,30 +15,39 @@ class ParticipateInForumTest extends TestCase
     public function an_unauthenticated_user_may_not_add_replies(){
 
         // Given no auth user
-
-        $this->expectException('Illuminate\Auth\AuthenticationException');      // Then this test should throw AuthenticationException
-
         // when a reply is created in a thread
-        $this->post('/threads/1/replies', []);  // empty reply body.
-
+        $this->withExceptionHandling()
+            ->post('/threads/some-channel/1/replies', [])
+            ->assertRedirect('/login');
     }
 
     /** @test */
     public function an_authenticated_user_may_participates_in_forum_threads()
     {
         // Given a authenticated user
-        $this->be($user = factory('App\User')->create());   // be() sets the current authenticate user.
+        $this->signIn();
 
         // and an existing thread
-        $thread = factory('App\Thread')->create();
+        $thread = create('App\Thread');
 
         // when the user adds a reply to the thread
-        $reply = factory('App\Reply')->make();      // make a reply, create = make + submit to database.
+        $reply = make('App\Reply');      // make a reply, create = make + submit to database.
 
-        $this->post('/threads/' . $thread->id . '/replies', $reply->toArray());     // save the reply to the database
+        $this->post($thread->showThreadPath() . '/replies', $reply->toArray());     // save the reply to the database
 
         // then they reply should be visible on the page
-        $this->get('/threads/' . $thread->id)
+        $this->get($thread->showThreadPath())
             ->assertSee($reply->body);
+    }
+
+    /** @test */
+    public function a_reply_requires_a_body()
+    {
+        $this->withExceptionHandling()->signIn();
+        $thread = create('App\Thread');
+        $reply = make('App\Reply', ['body' => null]);
+        $this->post($thread->showThreadPath() . '/replies', $reply->toArray())
+            ->assertSessionHasErrors('body');
+
     }
 }

@@ -6,10 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reply extends Model
 {
-    protected $fillable = ["body", "thread_id", "user_id", "updated_at", "created_at"];
+    use Favoritable;
+
+    protected $fillable = ["body", "thread_id", "user_id"];
+    protected $with = ['owner', 'favorites'];
 
     public function owner()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
 }
