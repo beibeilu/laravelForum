@@ -73,6 +73,7 @@ class ThreadController extends Controller
     {
 //        $thread->load('replies');     // eager load replies along with the thread.
 //        return Thread::withCount('replies')->find(52);  // 52 is the thread id
+//        return $thread->replies;
         return view('threads.show', [
             'thread' => $thread,
             'replies' => $thread->replies()->paginate(15),

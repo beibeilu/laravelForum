@@ -14,6 +14,7 @@ class FavoriteController extends Controller
 
     public function store(Reply $reply)
     {
-        return $reply->favorited();
+        $reply->favorited();
+        return back();  // TODO: For users who redirect back from successful login, this does not redirect back to the thread correctly.
     }
 }

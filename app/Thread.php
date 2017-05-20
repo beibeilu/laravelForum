@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Thread extends Model
 {
     protected $fillable = ['title', 'body', 'user_id', 'channel_id'];
+    protected $with = ['creator', 'channel'];        //.. Or add global scope below
 
     protected static function boot(){
         parent::boot();
@@ -14,6 +15,10 @@ class Thread extends Model
         static::addGlobalScope('replyCount', function ($builder){
             $builder->withCount('replies');
         });
+
+//        static::addGlobalScope('creator', function ($builder){
+//            $builder->with('creator');
+//        });
     }
 
     public function replies(){

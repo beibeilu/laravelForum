@@ -35,7 +35,6 @@ class ViewThreadsTest extends TestCase
     public function a_user_can_view_replies_that_are_associated_with_the_thread()
     {
         $reply = create('App\Reply', ['thread_id'=>$this->thread->id]);
-
         $response = $this->get($this->thread->showThreadPath())
             ->assertSee($reply->body);
     }
