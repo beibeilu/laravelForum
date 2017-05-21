@@ -3,7 +3,7 @@
         <div class="level">
 
             <div class="flex">
-            <a href="#">{{ $reply->owner->name }}</a> said
+            <a href="/profiles/{{ $reply->owner->name }}">{{ $reply->owner->name }}</a> said
             {{ $reply->created_at->diffForHumans() }}
             </div>
 

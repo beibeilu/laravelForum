@@ -8,7 +8,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3>{{ $thread->title }}</h3>
-                        <a href="#">{{ $thread->creator->name }}</a> created
+                        <a href="/profiles/{{$thread->creator->name}}">{{ $thread->creator->name }}</a> created
                         {{ $thread->created_at->diffForHumans() }}
                     </div>
 
