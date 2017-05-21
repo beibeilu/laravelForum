@@ -20,9 +20,11 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('threads/{channel}/{thread}', 'ThreadController@show');
+Route::delete('threads/{channel}/{thread}', 'ThreadController@destroy');
 Route::resource('threads', 'ThreadController', ['except' => [
-    'show'
+    'show', 'delete'
 ]]);
+
 
 Route::get('threads/{channel}', 'ThreadController@index');
 

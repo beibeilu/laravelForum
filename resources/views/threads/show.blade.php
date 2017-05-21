@@ -17,6 +17,16 @@
                             {{ $thread->body }}
                         </article>
                     </div>
+                    @can('update', $thread)
+                    <div class="panel-body">
+                        <form action="{{$thread->showThreadPath()}}" method="POST">
+                            {{ csrf_field() }}
+                            {{ method_field('DELETE') }}
+                            <button type="submit" class="btn btn-link">Delete</button>
+                        </form>
+                    </div>
+                    @endcan
+
                 </div>
                 <hr>
 

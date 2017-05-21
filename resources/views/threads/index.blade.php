@@ -4,26 +4,26 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Forum Threads</div>
+                @forelse($threads as $thread)
+                    <div class="panel panel-default">
 
-                    <div class="panel-body">
-                        @foreach($threads as $thread)
-                            <article>
-                                <div class="level">
-                                    <h4 class="flex"><a href="{{$thread->showThreadPath()}}">{{ $thread->title }}</a></h4>
+                        <div class="panel-heading">
+                            <div class="level">
+                                <h4 class="flex"><a href="{{$thread->showThreadPath()}}">{{ $thread->title }}</a></h4>
 
-                                    <a href="{{ $thread->showThreadPath() }}">
-                                        <strong>{{ $thread->replies_count }}&nbsp;</strong> {{ str_plural('reply', $thread->replies_count) }}
-                                    </a>
-                                </div>
+                                <a href="{{ $thread->showThreadPath() }}">
+                                    <strong>{{ $thread->replies_count }}&nbsp;</strong> {{ str_plural('reply', $thread->replies_count) }}
+                                </a>
+                            </div>
+                        </div>
 
-                                <p>{{ $thread->body }}</p>
-                            </article>
-                            <hr>
-                        @endforeach
+                        <div class="panel-body">
+                            <p>{{ $thread->body }}</p>
+                        </div>
                     </div>
-                </div>
+                @empty
+                    <h4>There are no relevant result this time.</h4>
+                @endforelse
             </div>
         </div>
     </div>

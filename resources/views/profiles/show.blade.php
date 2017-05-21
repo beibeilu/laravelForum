@@ -11,8 +11,8 @@
                 <small>Since {{ $profileUser->created_at->diffForHumans() }}</small>
             </div>
 
+            @forelse($threads as $thread)
             <div class="panel panel-default">
-                @foreach($threads as $thread)
                     <div class="panel-body">
                         <div class="level">
                             <h4 class="flex"><a href="{{ $thread->showThreadPath() }}">{{ $thread->title }}</a></h4>
@@ -22,9 +22,13 @@
                             {{ $thread->body }}
                         </div>
                     </div>
-                @endforeach
+
             </div>
+            @empty
+                <h4>You do not have any threads.</h4>
+            @endforelse
             {{ $threads->links() }}
+
         </div>
     </div>
 </div>
