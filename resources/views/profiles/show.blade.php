@@ -11,25 +11,21 @@
                 <small>Since {{ $profileUser->created_at->diffForHumans() }}</small>
             </div>
 
-            @forelse($threads as $thread)
-            <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div class="level">
-                            <h4 class="flex"><a href="{{ $thread->showThreadPath() }}">{{ $thread->title }}</a></h4>
-                            <span>Published {{ $thread->created_at->diffForHumans() }}</span>
-                        </div>
-                        <div>
-                            {{ $thread->body }}
-                        </div>
-                    </div>
-
-            </div>
+            @forelse($activities as $date => $activitiesOnDate)
+                <h3 class="page-header">{{ $date }}</h3>
+                @foreach($activitiesOnDate as $activity)
+                    @include ("profiles.activities.{$activity->type}")
+                @endforeach
             @empty
-                <h4>You do not have any threads.</h4>
+                <h4>You do not have any activity.</h4>
             @endforelse
-            {{ $threads->links() }}
+            {{--{{ $threads->links() }}--}}
 
         </div>
     </div>
 </div>
 @endsection
+
+
+
+
