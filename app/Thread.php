@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
+    use RecordsActivity;
+
     protected $fillable = ['title', 'body', 'user_id', 'channel_id'];
     protected $with = ['creator', 'channel'];        //.. Or add global scope below
 
@@ -19,6 +21,13 @@ class Thread extends Model
 //        static::addGlobalScope('creator', function ($builder){
 //            $builder->with('creator');
 //        });
+
+        static::deleting(function($thread){
+            $thread->replies->each->delete();   //higher order messaging on laravel collection.
+//            $thread->replies->each(function($reply){
+//                $reply->delete();
+//            });
+        });
     }
 
     public function replies(){

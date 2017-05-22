@@ -2,12 +2,13 @@
 
 namespace Tests\Feature;
 
+use App\Activity;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class CreateThreadsTest extends TestCase
+class ModifyThreadsTest extends TestCase
 {
     use DatabaseMigrations;
 
@@ -38,6 +39,50 @@ class CreateThreadsTest extends TestCase
         $this->get($response->headers->get('Location'))     // get the location where the response is heading, without creating the thread.
                 ->assertSee($thread->title)
                 ->assertSee($thread->body);
+    }
+
+    /** @test */
+    public function unauthorized_user_can_not_delete_threads()
+    {
+        $this->withExceptionHandling();
+        $thread = create('App\Thread');
+        $this->delete($thread->showThreadPath())
+                        ->assertRedirect('/login');
+
+        $this->signIn();
+        $this->delete($thread->showThreadPath())
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function authenticated_can_delete_threads()
+    {
+        $this->signIn();
+
+        $thread = create('App\Thread', ['user_id'=>auth()->id()]);
+        $reply = create('App\Reply', ['thread_id'=>$thread->id]);
+
+        $response = $this->json('DELETE', $thread->showThreadPath());
+
+        $response->assertStatus(204);
+
+        $this->assertDatabaseMissing('threads', ['id'=> $thread->id]);
+        $this->assertDatabaseMissing('replies', ['id'=> $reply->id]);
+        $this->assertEquals(0, Activity::count());
+        $this->assertDatabaseMissing('activities', [
+            'subject_id'=> $thread->id,
+            'subject_type'=> get_class($thread),
+        ]);
+        $this->assertDatabaseMissing('activities', [
+            'subject_id'=> $reply->id,
+            'subject_type'=> get_class($reply),
+        ]);
+    }
+
+    /** @test */
+    public function threads_can_only_be_deleted_by_those_who_have_permission()
+    {
+        // TODO: add gate.
     }
 
     /** @test */
