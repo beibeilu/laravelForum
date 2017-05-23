@@ -14,7 +14,9 @@
             @forelse($activities as $date => $activitiesOnDate)
                 <h3 class="page-header">{{ $date }}</h3>
                 @foreach($activitiesOnDate as $activity)
-                    @include ("profiles.activities.{$activity->type}")
+                    @if(view()->exists("profiles.activities.{$activity->type}"))
+                        @include ("profiles.activities.{$activity->type}")
+                    @endif
                 @endforeach
             @empty
                 <h4>You do not have any activity.</h4>

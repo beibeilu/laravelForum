@@ -25,11 +25,16 @@ Route::resource('threads', 'ThreadController', ['except' => [
     'show', 'delete'
 ]]);
 
+Route::delete('replies/{reply}', 'ReplyController@destroy');
+Route::patch('replies/{reply}', 'ReplyController@update');
+
 
 Route::get('threads/{channel}', 'ThreadController@index');
 
 Route::post('/threads/{channel}/{thread}/replies', 'ReplyController@store')->name('add_reply_to_thread');
 
 Route::post('replies/{reply}/favorites', 'FavoriteController@store');
+Route::delete('replies/{reply}/favorites', 'FavoriteController@destroy');
+
 
 Route::get('/profiles/{user}', 'ProfileController@show');
