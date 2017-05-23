@@ -41,13 +41,47 @@ class ParticipateInForumTest extends TestCase
     }
 
     /** @test */
-    public function a_reply_requires_a_body()
+    public function unauthorized_user_can_not_delete_a_reply()
     {
-        $this->withExceptionHandling()->signIn();
-        $thread = create('App\Thread');
-        $reply = make('App\Reply', ['body' => null]);
-        $this->post($thread->showThreadPath() . '/replies', $reply->toArray())
-            ->assertSessionHasErrors('body');
+        $this->withExceptionHandling();
+        $reply = create('App\Reply');
+        $this->delete("/replies/{$reply->id}")
+            ->assertRedirect('login');
+        $this->signIn()->delete("/replies/{$reply->id}")
+            ->assertStatus(403);
+    }
 
+    /** @test */
+    public function an_authorized_user_may_delete_a_reply()
+    {
+        $this->signIn();
+        $reply = create('App\Reply', ['user_id' => auth()->id()]);
+        $this->delete("/replies/{$reply->id}")->assertStatus(302);
+        $this->assertDatabaseMissing('replies', $reply->toArray());
+
+    }
+
+    /** @test */
+    public function authorized_user_may_update_reply()
+    {
+        $this->signIn();
+        $reply = create('App\Reply', ['user_id' => auth()->id()]);
+
+        $updatedBody = 'You been changed.';
+        $this->patch("/replies/{$reply->id}", ['body' => $updatedBody]);
+        $this->assertDatabaseHas('replies', ['id' => $reply->id, 'body' => $updatedBody]);
+    }
+
+    /** @test */
+    public function unauthorized_user_can_not_update_a_reply()
+    {
+        $this->withExceptionHandling();
+        $reply = create('App\Reply');
+
+        $updatedBody = 'You been changed.';
+        $this->patch("/replies/{$reply->id}", ['body' => $updatedBody])
+            ->assertRedirect('login');
+        $this->signIn()->patch("/replies/{$reply->id}", ['body' => $updatedBody])
+            ->assertStatus(403);
     }
 }

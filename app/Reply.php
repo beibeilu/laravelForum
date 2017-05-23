@@ -11,6 +11,7 @@ class Reply extends Model
 
     protected $fillable = ["body", "thread_id", "user_id"];
     protected $with = ['owner', 'favorites'];
+    protected $appends = ['favoritesCount', 'isFavorited'];
 
     public function owner()
     {
@@ -22,4 +23,8 @@ class Reply extends Model
         return $this->belongsTo(Thread::class, 'thread_id');
     }
 
+    public function showReplyPath()
+    {
+        return $this->thread->showThreadPath()."#reply-{$this->id}";
+    }
 }

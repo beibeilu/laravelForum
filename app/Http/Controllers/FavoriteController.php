@@ -17,4 +17,9 @@ class FavoriteController extends Controller
         $reply->favorited();
         return back();  // TODO: For users who redirect back from successful login, this does not redirect back to the thread correctly.
     }
+
+    public function destroy(Reply $reply)
+    {
+        $reply->unfavorite();
+    }
 }
